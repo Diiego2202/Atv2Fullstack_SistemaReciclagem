@@ -13,6 +13,12 @@ router.post('/usuario', (req, res) =>{
     res.json({resultado: 'Usuario Cadastrado!!!', usuario: novo});
 })
 
+//Retorna um usuário
+router.get('/usuario/:id', (req, res) => {
+    const id = req.params._id;
+    res.json(usuarioController.obterUsuario(id));
+});
+
 //validar login e senha
 router.post('/usuario/login/', (req, res) => {
     if(usuarioController.login(req.body.username, req.body.senha)) {
