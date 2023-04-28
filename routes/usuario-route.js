@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const usuarioController = require('../controllers/usuario-controller');
+const usuarioController = require('../controller/usuario-controller');
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.use(bodyParser.json());
 
 //Cria um usuario
 router.post('/usuario', (req, res) =>{
-    const novo = usuarioController.novoUsuario(req.body.username, req.body.senha);
+    const novo = usuarioController.novoUsuario(req.body.username, req.body.senha, req.body.pontos, req.body.pontos, req.body.latitude, req.body.longitude);
     res.json({resultado: 'Usuario Cadastrado!!!', usuario: novo});
 })
 
@@ -20,20 +20,20 @@ router.get('/usuario/:id', (req, res) => {
 });
 
 //validar login e senha
-router.post('/usuario/login/', (req, res) => {
-    if(usuarioController.login(req.body.username, req.body.senha)) {
-        res.json({resultado: 'Login OK!'});
-    } else res.status(401).json({resultado: 'Usuário / Senha inválidos!'});
-});
+// router.post('/usuario/login/', (req, res) => {
+//     if(usuarioController.login(req.body.username, req.body.senha)) {
+//         res.json({resultado: 'Login OK!'});
+//     } else res.status(401).json({resultado: 'Usuário / Senha inválidos!'});
+// });
 
-router.put('/usuario/novasenha/:username', (req, res) => {
-    const username = req.params.username;
-    const novaSenha = req.body.senha;
-    console.log(username);
-    if(usuarioController.alterarSenha(username, novaSenha)){
-        res.json({resultado: 'Senha alterada com sucesso'});
-    } else res.status(400).json({resultado: 'Problemas para alterar a senha!'});
-})
+// router.put('/usuario/novasenha/:username', (req, res) => {
+//     const username = req.params.username;
+//     const novaSenha = req.body.senha;
+//     console.log(username);
+//     if(usuarioController.alterarSenha(username, novaSenha)){
+//         res.json({resultado: 'Senha alterada com sucesso'});
+//     } else res.status(400).json({resultado: 'Problemas para alterar a senha!'});
+// })
 
 module.exports = router;
 
