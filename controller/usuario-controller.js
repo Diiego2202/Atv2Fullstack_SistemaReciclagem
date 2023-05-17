@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const Usuario = require('../model/usuario');
 
-const criarUsuario = async (nome, senha, pontos, latitude, longitude) => {
-    const usuario = new Usuario({nome: nome, senha: senha, pontos: pontos, latitude: latitude, longitude: longitude});
-    return await usuario.save();
+const criarUsuario = async (username, senha, pontos, latitude, longitude) => {
+    const usuario = new Usuario({username: username, senha: senha, pontos: pontos, latitude: latitude, longitude: longitude});
+    const ret = await usuario.save();
+    return ret;
 }
 
 const atualizarUsuario = async (usuarioId, nome, senha, pontos, latitude, longitude) => {
@@ -36,18 +37,7 @@ const obterUsuario = async (usuarioId) => {
         session = await mongoose.startSession();
         session.startTransaction();
         const usuario = await Usuario.findById(usuarioId).exec();
-        if(usuario){
-;
-            return{
-                nome: usuario.nome,
-                senha: usuario.senha,
-                pontos: usuario.pontos,
-                latitude: usuario.latitude,
-                longitude: usuario.longitude,
-                reciclagem: usuario.reciclagem
-            };
-
-        }
+        return usuario;
         
     } catch (error) {
         console.log(error);
@@ -82,7 +72,15 @@ const deletarUsuario = async (usuarioId) => {
     }
 }
 
+const login = (username, senha) => {
+    const valido = Usuario.findOne({username: username, senha: senha});
+    if (valido){
+        return {valido: true};
+    } else return {valido: false};
+}
+
 module.exports.criarUsuario = criarUsuario;
 module.exports.atualizarUsuario = atualizarUsuario; 
 module.exports.obterUsuario = obterUsuario;
 module.exports.deletarUsuario = deletarUsuario;
+module.exports.login = login;
