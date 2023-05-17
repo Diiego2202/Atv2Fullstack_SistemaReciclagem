@@ -10,7 +10,7 @@ const criarReciclagem = async (usuarioId, item, imagem, peso, pontos) => {
         session.startTransaction();
         const usuario = await Usuario.findById(usuarioId).exec();
         if(usuario){
-            let reciclagem = new Reciclagem({usuario: usuario, item: item, imagem: imagem, peso: peso, data: new Date(), pontos: pontos});
+            let reciclagem = new Reciclagem({usuarioId: usuario._id, item: item, imagem: imagem, peso: peso, data: new Date(), pontos: pontos});
             reciclagem = await reciclagem.save({session: session});
             usuario.reciclagem.push(reciclagem);
             await usuario.save({session: session});

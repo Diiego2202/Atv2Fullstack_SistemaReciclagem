@@ -9,12 +9,24 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 //Cria uma Reciclagem
-router.post('/reciclagem/:id', (req, res) =>{
-    const id = req.params._id;
-    const usuario = usuarioController.obterUsuario(id);
-    const novo = reciclagemController.criarReciclagem(usuario, req.body.item, req.body.imagem, req.body.peso, req.body.data, req.body.pontos);
-    res.json({resultado: 'Reciclagem Cadastrado!!!', reciclagem: novo});
-})
+router.post('/reciclagem/:id', async(req, res) =>{
+    const usuario = await usuarioController.obterUsuario(req.params.id);
+    console.log(req.params.id);
+    console.log(usuario);
+    const novo = await reciclagemController.criarReciclagem(req.params.id, req.body.item, req.body.imagem, req.body.peso, req.body.pontos);
+    console.log(novo);
+    console.log(usuario._id);
+    res.json({resultado: 'Reciclagem Cadastrada!!!', reciclagem: novo});
+});
+
+router.get('/usuario/:id', async(req, res) => {
+    const usuario = await usuarioController.obterUsuario(req.params.id);
+    if(usuario){
+        res.json({resultado: 'Usuário encontrado!!!', usuario: usuario});
+    } else{
+        res.status(404).json({ resultado: 'ERRO!! Usuário não encontrado!' });
+    }
+});
 
 //Lista todos os itens reciclados de um usuário
 router.get('/reciclagem/:id', (req, res) => {
