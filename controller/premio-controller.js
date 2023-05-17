@@ -36,15 +36,51 @@ const obterPremio = async (premioId) => {
         session = await mongoose.startSession();
         session.startTransaction();
         const premio = await Premio.findById(premioId).exec();
-        if(premio){
-;
-            return{
-                descricao: premio.descricao,
-                pontos: premio.pontos,
-                quantidade: premio.quantidade,
-            };
-
+        return premio;
+        
+    } catch (error) {
+        console.log(error);
+        session.abortTransaction();
+    } finally {
+        if (session) {
+            session.endSession();
         }
+    }
+}
+
+const obterTodosPremios = async () => {
+
+    let session;
+    try {
+        session = await mongoose.startSession();
+        session.startTransaction();
+        const premio = await Premio.find().exec();
+        return premio;
+        
+    } catch (error) {
+        console.log(error);
+        session.abortTransaction();
+    } finally {
+        if (session) {
+            session.endSession();
+        }
+    }
+}
+
+const obterPremiosPontos = async (pontos) => {
+
+    let session;
+    try {
+        session = await mongoose.startSession();
+        session.startTransaction();
+        const premio = await Premio.find().exec();
+        var premioFiltro = [];
+        for (var i = 0; i < premio.length; i++){
+            if(premio[i].pontos == pontos){
+                premioFiltro.push(premio[i]);
+            }
+        }
+        return premioFiltro;
         
     } catch (error) {
         console.log(error);
@@ -82,4 +118,6 @@ const deletarPremio = async (premioId) => {
 module.exports.criarPremio = criarPremio;
 module.exports.atualizarPremio = atualizarPremio;
 module.exports.obterPremio = obterPremio;
+module.exports.obterTodosPremios = obterTodosPremios;
+module.exports.obterPremiosPontos = obterPremiosPontos;
 module.exports.deletarPremio = deletarPremio;
