@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Usuario = require('../model/usuario');
+const jsonwebtoken = require('jsonwebtoken');
+const bcryptjs = require('bcryptjs');
 
+var usuarios = [];
 const criarUsuario = async (username, senha, pontos, latitude, longitude) => {
     const usuario = new Usuario({username: username, senha: senha, pontos: pontos, latitude: latitude, longitude: longitude});
     const ret = await usuario.save();
@@ -8,7 +11,6 @@ const criarUsuario = async (username, senha, pontos, latitude, longitude) => {
 }
 
 const atualizarUsuario = async (usuarioId, nome, senha, pontos, latitude, longitude) => {
-
     let session;
     try {
         session = await mongoose.startSession();
@@ -31,7 +33,6 @@ const atualizarUsuario = async (usuarioId, nome, senha, pontos, latitude, longit
 }
 
 const obterUsuario = async (usuarioId) => {
-
     let session;
     try {
         session = await mongoose.startSession();
@@ -50,7 +51,6 @@ const obterUsuario = async (usuarioId) => {
 }
 
 const deletarUsuario = async (usuarioId) => {
-
     let session;
     try {
         session = await mongoose.startSession();
@@ -73,10 +73,15 @@ const deletarUsuario = async (usuarioId) => {
 }
 
 const login = (username, senha) => {
-    const valido = Usuario.findOne({username: username, senha: senha});
-    if (valido){
-        return {valido: true};
-    } else return {valido: false};
+    if (usuarios[username]) {
+        const valido = bcryptjs.compareSync(senha, usuarios[username].senha);
+        if (valido) {
+            const token = jsonwebtoken.sign({username: username}, process.env.SEGREDO);
+            return {valido: true, token: token};
+        } else return {valido: false};
+    } else {
+        return {valido: false};
+    }
 }
 
 module.exports.criarUsuario = criarUsuario;
