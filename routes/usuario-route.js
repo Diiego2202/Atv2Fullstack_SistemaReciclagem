@@ -51,22 +51,12 @@ router.delete('/usuario/:id', async(req, res) => {
 });
 
 //Efetua o login do usuário
-router.post('/usuario/login/', (req, res) => {
-    const login = usuarioController.login(req.body.username, req.body.senha);
+router.post('/usuario/login/', async(req, res) => {
+    const login = await usuarioController.login(req.body.username, req.body.senha);
     if (login.valido) {
         res.json(login);
     } else res.status(401).json(login);
 });
-
-
-// router.put('/usuario/novasenha/:username', (req, res) => {
-//     const username = req.params.username;
-//     const novaSenha = req.body.senha;
-//     console.log(username);
-//     if(usuarioController.alterarSenha(username, novaSenha)){
-//         res.json({resultado: 'Senha alterada com sucesso'});
-//     } else res.status(400).json({resultado: 'Problemas para alterar a senha!'});
-// })
 
 module.exports = router;
 
