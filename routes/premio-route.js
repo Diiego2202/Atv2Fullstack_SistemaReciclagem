@@ -59,6 +59,13 @@ router.get('/premio/disponivel/:pontos', async(req, res) => {
     }
 });
 
+router.post('/premio/:idPremio/usuario/:idUsuario', async(req, res) =>{
+    const novo = await premioController.atribuirPremio(req.params.idPremio, req.params.idUsuario);
+    if (novo) {
+        res.json({ status: novo });
+    } else res.json({ status: 400 });
+});
+
 module.exports = router;
 
 

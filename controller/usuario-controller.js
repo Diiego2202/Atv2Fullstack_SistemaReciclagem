@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Usuario = require('../model/usuario');
 const jsonwebtoken = require('jsonwebtoken');
 
-const criarUsuario = async (username, senha, pontos, latitude, longitude) => {
-    const usuario = new Usuario({username: username, senha: senha, pontos: pontos, latitude: latitude, longitude: longitude});
+const criarUsuario = async (username, senha) => {
+    const usuario = new Usuario({username: username, senha: senha, pontos: 0, latitude: 0, longitude: 0});
     const ret = await usuario.save();
     return ret;
 }

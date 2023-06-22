@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 const premioRoute = require ('./routes/premio-route');
 const usuarioRoute = require('./routes/usuario-route');
 const reciclagemRoute = require('./routes/reciclagem-route');
+var cors = require("cors");
 
 const url = "mongodb+srv://diiego2202:2202@cluster0.opgdhek.mongodb.net/CidadeVerde?retryWrites=true&w=majority";
 
 const app = express();
 
 // habilita a rota para usuarios
+app.use(cors());
 app.use(premioRoute);
 app.use(usuarioRoute);
 app.use(reciclagemRoute);
@@ -22,5 +24,5 @@ app.use((req, res) => {
 })
 
 mongoose.connect(url).then(() => {
-    app.listen(3000, () => console.log('Servidor iniciado...'));
+    app.listen(4000, () => console.log('Servidor iniciado...'));
 }).catch((err) => console.log(err));

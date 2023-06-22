@@ -12,7 +12,7 @@ router.use(bodyParser.json());
 router.post('/usuario', body('senha').isLength({min: 6}).withMessage("A senha deve ter pelo menos 6 digitos"), async(req, res) =>{
     const validacao = validationResult(req).array();
         if (validacao.length === 0) {
-            const novo = await usuarioController.criarUsuario(req.body.username, req.body.senha, req.body.pontos, req.body.latitude, req.body.longitude);
+            const novo = await usuarioController.criarUsuario(req.body.username, req.body.senha);
             res.json({resultado: 'Usuario Cadastrado!!!', usuario: novo});
         } else{
             res.status(401).json(validacao);
