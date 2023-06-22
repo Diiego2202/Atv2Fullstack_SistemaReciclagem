@@ -73,13 +73,13 @@ const deletarUsuario = async (usuarioId) => {
 const login = async (username, senha) => {
     const user = await Usuario.findOne({username: username, senha: senha});
     if (user) {
-        const valido = senha.localeCompare(user.senha);
-        if (valido == 0) {
-            const token = jsonwebtoken.sign({username: username}, "segredo");
-            return {valido: true, token: token};
-        } else return {valido: false};
+        if (senha === user.senha) {
+            return {user};
+        }else {
+            return null;
+        }
     } else {
-        return {valido: false};
+        return null;
     }
 }
 
